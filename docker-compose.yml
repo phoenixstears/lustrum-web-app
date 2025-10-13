@@ -12,7 +12,8 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
-
+      - ./backend/db/init:/docker-entrypoint-initdb.d/init
+      - ./backend/db/init.sh:/docker-entrypoint-initdb.d/0_init.sh
   backend:
     build: ./backend
     restart: always
