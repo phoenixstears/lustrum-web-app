@@ -40,3 +40,31 @@
 .read-the-docs {
   color: #888;
 }
+
+.button-list {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button-list a{
+  height: 100px;
+  width: 500px;
+  background-color: lightblue;
+  display: flex;           /* align image and text in a row */
+  align-items: center;     /* vertically center them */
+  padding: 0.5rem;
+  border: 1px solid black;
+  overflow: hidden;        /* clip anything that exceeds the box */
+  box-sizing: border-box;  /* include padding/border in max size */
+  gap: 0.5rem;             /* spacing between image and text */
+}
+.button-list img{
+  max-height: 95%;   
+  object-fit: contain;
+}
+
+.button-list span{
+  font-size: 30px;
+  margin: 0;
+  word-wrap: break-word; 
+}
