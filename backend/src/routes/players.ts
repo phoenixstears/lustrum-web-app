@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get("/", async (_req: Request, res: Response) => {
   try {
-    const result = await pool.query("SELECT playerid, discordname, ingamename, teamid FROM players");
+    const result = await pool.query("SELECT * FROM players");
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -14,8 +14,6 @@ router.get("/", async (_req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  console.log("POST /api/players headers:", req.headers);
-  console.log("POST /api/players body:", req.body);
 
   const body = req.body ?? {};
   const { discordname, ingamename} = body;
