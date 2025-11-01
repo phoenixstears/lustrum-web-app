@@ -3,7 +3,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import playerRouter from "./routes/players.js";
 import tournamentRouter from "./routes/tournaments.js";
+import groupBracketRouter from "./routes/group_bracket.js";
 import pool from "./db/index.js";
+
 
 dotenv.config();
 
@@ -12,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/players", playerRouter);
 app.use("/api/tournaments", tournamentRouter);
+app.use("/api/group_bracket", groupBracketRouter);
 
 app.get("/api", async (_req: Request, res: Response) => {
   const result = await pool.query("SELECT NOW()");
