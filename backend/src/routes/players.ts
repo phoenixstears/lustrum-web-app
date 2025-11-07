@@ -3,7 +3,7 @@ import pool from "../db/index.js";
 
 const router = express.Router();
 
-router.get("/", async (_req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
     const result = await pool.query("SELECT * FROM players");
     res.json(result.rows);
@@ -11,6 +11,19 @@ router.get("/", async (_req: Request, res: Response) => {
     console.error("Error fetching users:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
+});
+
+
+// get all players of a team, 99.9% gonna need this at some point 
+router.get("/team/:id", async (req: Request, res: Response) => {
+       const {teamId} = req.params
+       try {
+        const result = await pool.query("SELECT * FROM players WHERE teamId = $1", [teamId]);
+        res.json(result.rows)
+       } catch (error) {
+        console.error("Error fetching players of a team", error);
+        res.status(500).json({error: "Internal Server Error"});
+       }
 });
 
 router.post("/", async (req: Request, res: Response) => {

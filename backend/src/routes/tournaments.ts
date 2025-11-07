@@ -40,7 +40,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     }
     try {
         const result = await pool.query(
-                'UPstarttime tournaments SET gamename = $1, starttime = $2, brackettype = $3 WHERE tournamentid = $4 RETURNING tournamentid, gamename, starttime, brackettype',
+                'UPDATE tournaments SET gamename = $1, starttime = $2, brackettype = $3 WHERE tournamentid = $4 RETURNING tournamentid, gamename, starttime, brackettype',
                 [gamename, starttime, brackettype, id]
             );
         res.json(result.rows[0]);
