@@ -16,7 +16,7 @@ router.get("/", async (req: Request,res: Response) => {
 router.get("/:id", async (req: Request, res: Response) => {
         const { id } = req.params;
         try{
-            const result = await pool.query('SELECT * FROM ladder_brackets WHERE id = $1', [id]);
+            const result = await pool.query('SELECT * FROM ladder_brackets WHERE bracketId = $1', [id]);
             res.json(result.rows[0]);
         } catch (error){
             console.error("Error fetching ladder bracket", error);
@@ -67,3 +67,4 @@ router.delete("/:id", async (req: Request, res: Response) => {
        }
 });
 
+export default router;

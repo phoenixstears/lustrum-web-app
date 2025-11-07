@@ -13,11 +13,22 @@ router.get("/", async (_req: Request, res: Response) => {
     } 
 });
 
+router.get("/:id", async (req: Request, res: Response) => {
+        const { id } = req.params;
+        try{
+            const result = await pool.query('SELECT * FROM tournaments WHERE tournamentId = $1', [id]);
+            res.json(result.rows[0]);
+        } catch (error){
+            console.error("Error fetching tournament", error);
+            res.status(500).json({ error: "Internal Sever Error"});
+        }
+});
+
 router.post('/', async (req: Request, res: Response) => {
     const body = req.body ?? {};
     const { gamename, starttime, brackettype } = body;
-    if (!gamename || !starttime || !brackettype) {
-        return res.status(400).json({ error: 'gamename, starttime and brackettype are required' });
+    if (!gamename) {
+        return res.status(400).json({ error: 'gamename is required' });
     }
     try {
         const result = await pool.query(
@@ -35,8 +46,8 @@ router.put('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     const body = req.body ?? {};
     const { gamename, starttime, brackettype } = body;
-    if (!gamename || !starttime || !brackettype) {
-        return res.status(400).json({ error: 'gamename, starttime and brackettype are required' });
+    if (!gamename) {
+        return res.status(400).json({ error: 'gamename is required' });
     }
     try {
         const result = await pool.query(

@@ -13,6 +13,17 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/:id", async (req: Request, res: Response) => {
+        const { id } = req.params;
+        try{
+            const result = await pool.query('SELECT * FROM players WHERE playerId = $1', [id]);
+            res.json(result.rows[0]);
+        } catch (error){
+            console.error("Error fetching player", error);
+            res.status(500).json({ error: "Internal Sever Error"});
+        }
+});
+
 
 // get all players of a team, 99.9% gonna need this at some point 
 router.get("/team/:id", async (req: Request, res: Response) => {
@@ -37,7 +48,7 @@ router.post("/", async (req: Request, res: Response) => {
 
   try {
     const result = await pool.query(
-      "INSERT INTO players (discordname, ingamename) VALUES ($1, $2) RETURNING playerid, discordname, ingamename, teamid",
+      "INSERT INTO players (discordname, ingamename) VALUES ($1, $2) RETURNING playerId, discordname, ingamename, teamid",
       [discordname, ingamename]
     );
     res.status(201).json(result.rows[0]);
