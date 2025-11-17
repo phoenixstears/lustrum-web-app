@@ -24,6 +24,18 @@ router.get("/:id", async (req: Request, res: Response) => {
         }
 });
 
+// get by tournament id, only use when sure that it exists
+router.get("/tournament/:id", async (req: Request, res: Response) => {
+        const { id } = req.params;
+        try{
+            const result = await pool.query('SELECT * FROM ladder_brackets WHERE tournamentId = $1', [id]);
+            res.json(result.rows[0]);
+        } catch (error){
+            console.error("Error fetching ladder bracket", error);
+            res.status(500).json({ error: "Internal Sever Error"});
+        }
+});
+
 router.post("/", async (req: Request, res: Response) => {
          const body = req.body ?? {};
          const {size, tournamentId} = body;

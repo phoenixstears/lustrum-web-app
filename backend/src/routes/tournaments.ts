@@ -24,6 +24,18 @@ router.get("/:id", async (req: Request, res: Response) => {
         }
 });
 
+// get tournament by game name; further discussion needed but I think the names should be standardized and unique so we can do this, defo more intuitive than doing so by ID
+router.get("/game/:name", async (req: Request, res: Response) => {
+        const { name } = req.params;
+        try{
+            const result = await pool.query('SELECT * FROM tournaments WHERE gameName = $1', [name]);
+            res.json(result.rows[0]);
+        } catch (error){
+            console.error("Error fetching tournament", error);
+            res.status(500).json({ error: "Internal Sever Error"});
+        }
+});
+
 router.post('/', async (req: Request, res: Response) => {
     const body = req.body ?? {};
     const { gamename, starttime, brackettype } = body;
