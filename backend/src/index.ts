@@ -1,17 +1,26 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { Pool } from "pg";
+import playerRouter from "./routes/players.js";
+import tournamentRouter from "./routes/tournaments.js";
+import groupBracketRouter from "./routes/group_bracket.js";
+import ladderBracketRouter from "./routes/ladder_bracket.js"
+import teamRouter from "./routes/team.js"
+import matchRouter from "./routes/match.js"
+import pool from "./db/index.js";
+
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
+app.use("/api/players", playerRouter);
+app.use("/api/tournaments", tournamentRouter);
+app.use("/api/group_bracket", groupBracketRouter);
+app.use("/api/ladder_bracket", ladderBracketRouter);
+app.use("/api/teams", teamRouter);
+app.use("/api/matches", matchRouter);
 
 app.get("/api", async (_req: Request, res: Response) => {
   const result = await pool.query("SELECT NOW()");
