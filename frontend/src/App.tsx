@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import TournamentPage from './tournamentPage.tsx';
 import HomePage from './homePage.tsx';
 
@@ -15,6 +15,14 @@ function App() {
         <Route path="/lol" element={<TournamentPage />} />
         <Route path="/cs2" element={<TournamentPage />} />
         <Route path="/valorant" element={<TournamentPage />} />
+        <Route path="/aram" element={<TournamentPage />} />
+        <Route path="/geoguessr" element={<TournamentPage />} />
+        <Route path="/mc" element={<TournamentPage />} />
+        <Route path="/osu" element={<TournamentPage />} />
+        <Route path="/pokemon" element={<TournamentPage />} />
+        <Route path="/smash" element={<TournamentPage />} />
+        <Route path="/tft" element={<TournamentPage />} />
+        <Route path="/trackmania" element={<TournamentPage />} />
       </Routes>
       </Router>
     </>

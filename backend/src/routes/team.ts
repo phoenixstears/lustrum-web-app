@@ -26,7 +26,7 @@ router.post("/", async (req: Request, res: Response) => {
     }
 })
 
-router.delete(":/id", async (req: Request, res:Response) => {
+router.delete("/:id", async (req: Request, res:Response) => {
        const {teamId} = req.params
        try {
            await pool.query("DELETE FROM teams WHERE teamId = $1", [teamId]);
