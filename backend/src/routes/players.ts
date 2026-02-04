@@ -37,19 +37,31 @@ router.get("/team/:id", async (req: Request, res: Response) => {
        }
 });
 
+// get all players of a tournament need it for the player list of the 
+router.get("/tournament/:id", async (req: Request, res: Response) => {
+        const {id} = req.params
+        try {
+            const result = await pool.query("SELECT * FROM players WHERE tournamentId = $1", [id]);
+            res.json(result.rows)
+        } catch (error) {
+            console.error("Error fetching players of a tournament", error);
+            res.status(500).json({error: "Internal Server Error"});
+        }
+});
+
 router.post("/", async (req: Request, res: Response) => {
 
   const body = req.body ?? {};
-  const { discordname, ingamename} = body;
+  const { discordname, ingamename, tournamentId } = body;
 
-  if (!discordname || !ingamename) {
-    return res.status(400).json({ error: "discordname, ingamename and teamid are required" });
+  if (!discordname || !ingamename || !tournamentId) {
+    return res.status(400).json({ error: "discordname, ingamename and tournamentId are required" });
   }
 
   try {
     const result = await pool.query(
-      "INSERT INTO players (discordname, ingamename) VALUES ($1, $2) RETURNING playerId, discordname, ingamename, teamid",
-      [discordname, ingamename]
+      "INSERT INTO players (discordname, ingamename, tournamentId) VALUES ($1, $2, $3) RETURNING playerId, discordname, ingamename, teamid, tournamentId",
+      [discordname, ingamename, tournamentId]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -61,16 +73,16 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   const body = req.body ?? {};
-  const { discordname, ingamename, teamid } = body;
+  const { discordname, ingamename, teamid, tournamentId } = body;
 
-  if (!discordname || !ingamename || teamid == null) {
-    return res.status(400).json({ error: "discordname, ingamename and teamid are required" });
+  if (!discordname || !ingamename || !tournamentId) {
+    return res.status(400).json({ error: "discordname, ingamename and tournamentId are required" });
   }
 
   try {
     const result = await pool.query(
-      "UPDATE players SET discordname = $1, ingamename = $2, teamid = $3 WHERE playerid = $4 RETURNING playerid, discordname, ingamename, teamid",
-      [discordname, ingamename, teamid, id]
+      "UPDATE players SET discordname = $1, ingamename = $2, teamid = $3, tournamentId = $4 WHERE playerid = $5 RETURNING playerid, discordname, ingamename, teamid, tournamentId",
+      [discordname, ingamename, teamid, tournamentId, id]
     );
     res.json(result.rows[0]);
   } catch (error) {

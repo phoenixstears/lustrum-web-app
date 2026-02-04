@@ -80,7 +80,8 @@ export default function RegisterPage(){
         },
         body: JSON.stringify({
           discordname: formData.discordName,
-          ingamename: formData.inGameName
+          ingamename: formData.inGameName,
+          tournamentId: id
         })
       });
 
