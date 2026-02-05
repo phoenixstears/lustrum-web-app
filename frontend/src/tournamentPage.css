@@ -194,6 +194,90 @@ body {
   border-color: #00A6D6;
 }
 
+.players-section {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(209, 145, 2, 0.4);
+  border-radius: 15px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  margin-top: 30px;
+  animation: slideUp 0.6s ease-out 0.3s both;
+}
+
+.players-section h2 {
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 30px;
+  color: #00A6D6;
+  border-bottom: 2px solid rgba(0, 166, 214, 0.5);
+  padding-bottom: 15px;
+}
+
+.players-list {
+  display: grid;
+  gap: 25px;
+}
+
+.team-group, .solo-players {
+  background: rgba(74, 9, 122, 0.3);
+  border: 1px solid rgba(209, 145, 2, 0.3);
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.team-name {
+  font-size: 1.3rem;
+  color: #D19102;
+  margin: 0 0 15px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.players-in-team {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.player-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px 15px;
+  border-radius: 6px;
+  border-left: 3px solid #00A6D6;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.player-item:hover {
+  background: rgba(0, 166, 214, 0.1);
+  transform: translateX(5px);
+}
+
+.player-discord {
+  font-weight: 600;
+  color: #00A6D6;
+  flex: 1;
+  text-align: left;
+}
+
+.player-ingame {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+.no-players {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+  padding: 30px;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

@@ -49,6 +49,24 @@ router.get("/tournament/:id", async (req: Request, res: Response) => {
         }
 });
 
+// get all players of a tournament with their team information
+router.get("/tournament/:id/withteams", async (req: Request, res: Response) => {
+        const {id} = req.params
+        try {
+            const result = await pool.query(
+                `SELECT p.*, t.teamId, t.teamName FROM players p 
+                 LEFT JOIN teams t ON p.teamId = t.teamId 
+                 WHERE p.tournamentId = $1 
+                 ORDER BY t.teamName NULLS LAST, p.discordName`,
+                [id]
+            );
+            res.json(result.rows)
+        } catch (error) {
+            console.error("Error fetching players of a tournament", error);
+            res.status(500).json({error: "Internal Server Error"});
+        }
+});
+
 router.post("/", async (req: Request, res: Response) => {
 
   const body = req.body ?? {};
