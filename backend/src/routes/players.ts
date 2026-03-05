@@ -70,20 +70,30 @@ router.get("/tournament/:id/withteams", async (req: Request, res: Response) => {
 router.post("/", async (req: Request, res: Response) => {
 
   const body = req.body ?? {};
-  const { discordname, ingamename, tournamentId } = body;
+  const { discordId, discordName, inGameName, tournamentId } = body;
 
-  if (!discordname || !ingamename || !tournamentId) {
-    return res.status(400).json({ error: "discordname, ingamename and tournamentId are required" });
+  if (!discordId || !discordName || !inGameName || !tournamentId) {
+    return res.status(400).json({ error: "discordId, discordName, inGameName and tournamentId are required" });
   }
 
   try {
+    // Check if user already signed up for this tournament
+    const existingSignup = await pool.query(
+      "SELECT playerId FROM players WHERE discordId = $1 AND tournamentId = $2",
+      [discordId, tournamentId]
+    );
+
+    if (existingSignup.rows.length > 0) {
+      return res.status(409).json({ error: "You have already signed up for this tournament" });
+    }
+
     const result = await pool.query(
-      "INSERT INTO players (discordname, ingamename, tournamentId) VALUES ($1, $2, $3) RETURNING playerId, discordname, ingamename, teamid, tournamentId",
-      [discordname, ingamename, tournamentId]
+      "INSERT INTO players (discordId, discordName, inGameName, tournamentId) VALUES ($1, $2, $3, $4) RETURNING playerId, discordId, discordName, inGameName, teamId, tournamentId",
+      [discordId, discordName, inGameName, tournamentId]
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error creating player:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -91,20 +101,20 @@ router.post("/", async (req: Request, res: Response) => {
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   const body = req.body ?? {};
-  const { discordname, ingamename, teamid, tournamentId } = body;
+  const { discordId, discordName, inGameName, teamId, tournamentId } = body;
 
-  if (!discordname || !ingamename || !tournamentId) {
-    return res.status(400).json({ error: "discordname, ingamename and tournamentId are required" });
+  if (!discordId || !discordName || !inGameName || !tournamentId) {
+    return res.status(400).json({ error: "discordId, discordName, inGameName and tournamentId are required" });
   }
 
   try {
     const result = await pool.query(
-      "UPDATE players SET discordname = $1, ingamename = $2, teamid = $3, tournamentId = $4 WHERE playerid = $5 RETURNING playerid, discordname, ingamename, teamid, tournamentId",
-      [discordname, ingamename, teamid, tournamentId, id]
+      "UPDATE players SET discordId = $1, discordName = $2, inGameName = $3, teamId = $4, tournamentId = $5 WHERE playerId = $6 RETURNING playerId, discordId, discordName, inGameName, teamId, tournamentId",
+      [discordId, discordName, inGameName, teamId, tournamentId, id]
     );
     res.json(result.rows[0]);
   } catch (error) {
-    console.error("Error updating user:", error);
+    console.error("Error updating player:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
