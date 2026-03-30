@@ -7,6 +7,7 @@ import groupBracketRouter from "./routes/group_bracket.js";
 import ladderBracketRouter from "./routes/ladder_bracket.js"
 import teamRouter from "./routes/team.js"
 import matchRouter from "./routes/match.js"
+import authRouter from "./routes/auth.js";
 import pool from "./db/index.js";
 
 
@@ -21,6 +22,7 @@ app.use("/api/group_bracket", groupBracketRouter);
 app.use("/api/ladder_bracket", ladderBracketRouter);
 app.use("/api/teams", teamRouter);
 app.use("/api/matches", matchRouter);
+app.use("/api/auth", authRouter);
 
 app.get("/api", async (_req: Request, res: Response) => {
   const result = await pool.query("SELECT NOW()");
