@@ -1,6 +1,7 @@
 //@ts-ignore
 import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
+import { useAuth } from './AuthContext.tsx';
 import './homePage.css';
 
 interface Tournament {
@@ -13,6 +14,7 @@ interface Tournament {
 const API_URL = "http://localhost:5000/api";
 
 export default function HomePage(){
+  const { discordUser, logout } = useAuth();
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -34,8 +36,33 @@ export default function HomePage(){
     }
   };
 
+  const handleLoginWithDiscord = () => {
+    const backendUrl = "http://localhost:5000";
+    const state = "home";
+    const redirectUrl = `${backendUrl}/api/auth/discord?state=${encodeURIComponent(state)}`;
+    window.location.href = redirectUrl;
+  };
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className="home-page">
+      <div className="auth-controls">
+        {discordUser ? (
+          <>
+            <span className="user-info">{discordUser.discordName}</span>
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <button className="login-btn" onClick={handleLoginWithDiscord}>
+            Login with Discord
+          </button>
+        )}
+      </div>
       <div className="home-header">
         <img src="/assets/SEALAN.gif" alt="SEALAN logo" />
         <h1>S.E.A LAN tournament viewer!!11!!</h1>
