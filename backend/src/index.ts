@@ -8,6 +8,7 @@ import ladderBracketRouter from "./routes/ladder_bracket.js"
 import teamRouter from "./routes/team.js"
 import matchRouter from "./routes/match.js"
 import authRouter from "./routes/auth.js";
+import challongeRouter from "./routes/challonge_api.js"
 import pool from "./db/index.js";
 
 
@@ -23,6 +24,7 @@ app.use("/api/ladder_bracket", ladderBracketRouter);
 app.use("/api/teams", teamRouter);
 app.use("/api/matches", matchRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/challonge", challongeRouter);
 
 app.get("/api", async (_req: Request, res: Response) => {
   const result = await pool.query("SELECT NOW()");

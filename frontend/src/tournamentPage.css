@@ -156,6 +156,35 @@ body {
   transform: translateY(0);
 }
 
+.actions-row {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 20px;
+}
+
+.bracket-button {
+  display: block;
+  width: 100%;
+  padding: 15px 30px;
+  background: rgba(0, 166, 214, 0.15);
+  border: 1px solid rgba(0, 166, 214, 0.8);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.bracket-button:hover {
+  background: rgba(0, 166, 214, 0.25);
+}
+
 .error-container {
   text-align: center;
   padding: 60px 20px;

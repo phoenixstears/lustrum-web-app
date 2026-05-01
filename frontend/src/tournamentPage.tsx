@@ -93,6 +93,8 @@ export default function TournamentPage(){
     return teamPlayers[0]?.teamname || 'Unnamed Team';
   };
 
+  // The tournament page loads the tournament record and registered players from the database.
+  // This is the same data that the bracket generator will use to populate team entries.
   if (loading) {
     return <div className="tournament-page"><p>Loading tournament information...</p></div>;
   }
@@ -156,9 +158,14 @@ export default function TournamentPage(){
             )}
           </div>
 
-          <Link to={`/tournament/${tournament.tournamentid}/register`} className="register-button">
-            Register for this Tournament
-          </Link>
+          <div className="actions-row">
+            <Link to={`/tournament/${tournament.tournamentid}/register`} className="register-button">
+              Register for this Tournament
+            </Link>
+            <Link to={`/tournament/${tournament.tournamentid}/bracket`} className="bracket-button">
+              Bracket Generator
+            </Link>
+          </div>
         </div>
 
         <div className="players-section">
