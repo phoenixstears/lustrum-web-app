@@ -132,6 +132,16 @@ router.post("/", async (req: Request, res: Response) => {
         return res.status(401).json({ error: "Invalid join code" });
       }
 
+      // Ensure the team belongs to this tournament.
+      const tournamentTeamResult = await pool.query(
+        "SELECT 1 FROM players WHERE teamId = $1 AND tournamentId = $2 LIMIT 1",
+        [teamId, tournamentId]
+      );
+
+      if (tournamentTeamResult.rows.length === 0) {
+        return res.status(400).json({ error: "Team is not part of this tournament" });
+      }
+
       // Check max player count
       const maxPlayerResult = await pool.query(
         "SELECT maxPlayersPerTeam FROM tournaments WHERE tournamentId = $1",

@@ -84,18 +84,10 @@ export default function RegisterPage(){
 
   const fetchTeams = async () => {
     try {
-      const response = await fetch(`${API_URL}/teams`);
+      const response = await fetch(`${API_URL}/teams?tournamentId=${id}`);
       if (response.ok) {
         const teamsData = await response.json();
-        // Fetch member counts for each team
-        const teamsWithCounts = await Promise.all(
-          teamsData.map(async (team: any) => {
-            const membersResponse = await fetch(`${API_URL}/teams/${team.teamid}/members`);
-            const members = membersResponse.ok ? await membersResponse.json() : [];
-            return { ...team, membercount: members.length };
-          })
-        );
-        setTeams(teamsWithCounts);
+        setTeams(teamsData);
       }
     } catch (err) {
       console.error('Error fetching teams:', err);

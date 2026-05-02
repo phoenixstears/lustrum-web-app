@@ -17,6 +17,21 @@ async function generateUniqueJoinCode(): Promise<string> {
 
 router.get("/", async (req: Request, res: Response) => {
      try {
+        const { tournamentId } = req.query;
+
+        if (typeof tournamentId === "string" && tournamentId.trim() !== "") {
+            const result = await pool.query(
+                `SELECT t.*, COUNT(p.playerId)::int AS memberCount
+                 FROM teams t
+                 INNER JOIN players p ON p.teamId = t.teamId
+                 WHERE p.tournamentId = $1
+                 GROUP BY t.teamId
+                 ORDER BY t.teamName`,
+                [tournamentId]
+            );
+            return res.json(result.rows);
+        }
+
         const result = await pool.query("SELECT * FROM teams");
         res.json(result.rows);
      } catch (error){
