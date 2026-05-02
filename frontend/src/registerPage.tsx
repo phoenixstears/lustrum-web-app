@@ -249,6 +249,13 @@ export default function RegisterPage(){
     );
   }
 
+  const isSignupClosed = tournament.starttime
+    ? new Date(tournament.starttime).getTime() <= Date.now()
+    : false;
+  const formattedStartTime = tournament.starttime
+    ? new Date(tournament.starttime).toLocaleString()
+    : null;
+
   return (
     <div className="register-page">
       <div className="register-header">
@@ -257,7 +264,12 @@ export default function RegisterPage(){
       </div>
 
       <div className="register-container">
-        {signupStep === 'complete' && signupMessage?.includes('Successfully') ? (
+        {isSignupClosed ? (
+          <div className="signup-message info">
+            Signups are closed for this tournament.
+            {formattedStartTime ? ` Tournament started at ${formattedStartTime}.` : ''}
+          </div>
+        ) : signupStep === 'complete' && signupMessage?.includes('Successfully') ? (
           <div className={`signup-message success`}>
             {signupMessage}
             <Link to={`/tournament/${id}`} className="back-link">View Tournament</Link>
@@ -271,6 +283,7 @@ export default function RegisterPage(){
                 <button 
                   onClick={handleLoginWithDiscord}
                   className="discord-login-button"
+                  disabled={isSignupClosed}
                 >
                   <span>🔗 Login with Discord</span>
                 </button>
@@ -294,7 +307,7 @@ export default function RegisterPage(){
                       <button
                         className="team-option-button"
                         onClick={() => setSignupStep('team-create')}
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isSignupClosed}
                       >
                         <span className="option-title">Create New Team</span>
                         <span className="option-desc">Start your own team</span>
@@ -302,7 +315,7 @@ export default function RegisterPage(){
                       <button
                         className="team-option-button"
                         onClick={() => setSignupStep('team-join')}
-                        disabled={isSubmitting || teams.length === 0}
+                        disabled={isSubmitting || isSignupClosed || teams.length === 0}
                       >
                         <span className="option-title">Join Existing Team</span>
                         <span className="option-desc">Join another team ({teams.length} available)</span>
@@ -346,7 +359,7 @@ export default function RegisterPage(){
                     <button 
                       type="submit" 
                       className="signup-button"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || isSignupClosed}
                     >
                       {isSubmitting ? 'Creating Team...' : 'Create Team and Sign Up'}
                     </button>
@@ -430,7 +443,7 @@ export default function RegisterPage(){
                     <button 
                       type="submit" 
                       className="signup-button"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || isSignupClosed}
                     >
                       {isSubmitting ? 'Joining Team...' : 'Join Team and Sign Up'}
                     </button>

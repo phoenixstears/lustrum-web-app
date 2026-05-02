@@ -82,6 +82,20 @@ router.post("/", async (req: Request, res: Response) => {
   }
 
   try {
+    const tournamentResult = await pool.query(
+      "SELECT startTime, maxPlayersPerTeam FROM tournaments WHERE tournamentId = $1",
+      [tournamentId]
+    );
+
+    if (tournamentResult.rows.length === 0) {
+      return res.status(404).json({ error: "Tournament not found" });
+    }
+
+    const tournamentStartTime = tournamentResult.rows[0].starttime;
+    if (tournamentStartTime && new Date(tournamentStartTime).getTime() <= Date.now()) {
+      return res.status(409).json({ error: "Signups are closed for this tournament" });
+    }
+
     // Check if user already signed up for this tournament
     const existingSignup = await pool.query(
       "SELECT playerId FROM players WHERE discordId = $1 AND tournamentId = $2",
@@ -143,12 +157,7 @@ router.post("/", async (req: Request, res: Response) => {
       }
 
       // Check max player count
-      const maxPlayerResult = await pool.query(
-        "SELECT maxPlayersPerTeam FROM tournaments WHERE tournamentId = $1",
-        [tournamentId]
-      );
-
-      const maxPlayers = maxPlayerResult.rows[0]?.maxplayersperteam || 5;
+      const maxPlayers = tournamentResult.rows[0]?.maxplayersperteam || 5;
 
       const memberCountResult = await pool.query(
         "SELECT COUNT(*) FROM players WHERE teamId = $1",
