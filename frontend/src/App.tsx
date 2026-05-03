@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <AuthProvider>
-        <Router>s
+        <Router>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/tournament/:id" element={<TournamentPage />} />
