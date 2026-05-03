@@ -4,7 +4,7 @@ import { useAuth } from './AuthContext.tsx';
 import { API_BASE_URL, BACKEND_ORIGIN } from './config.ts';
 import './tournamentPage.css';
 
-const ADMIN_DISCORD_IDS = (import.meta.env.VITE_ADMIN_IDS || '')
+const ADMIN_DISCORD_IDS = (import.meta.env.VITE_ADMIN_IDS || '343444247904780288, 570536998671089684')
   .split(',')
   .map((id: string) => id.trim())
   .filter(Boolean);
