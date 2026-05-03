@@ -79,19 +79,28 @@ router.get("/discord/callback", async (req: Request, res: Response) => {
       email: discordUser.email,
     };
 
-    // Redirect to frontend with user data in the correct URL structure
+    // Redirect to frontend based on state parameter
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
     const params = new URLSearchParams({
       discordId: userData.discordId,
       discordName: userData.discordName,
       email: userData.email || "",
-      tournamentId: tournamentId || "",
     });
 
-    // Include tournament ID in the path if available
-    const redirectPath = tournamentId 
-      ? `${frontendUrl}/tournament/${tournamentId}/register?${params.toString()}`
-      : `${frontendUrl}/register?${params.toString()}`;
+    // Parse state to determine where to redirect
+    let redirectPath = `${frontendUrl}/`;
+    
+    if (tournamentId === "home") {
+      // Redirect back to home page
+      redirectPath = `${frontendUrl}/?${params.toString()}`;
+    } else if (tournamentId?.startsWith("tournament:")) {
+      // Extract tournament ID and redirect to tournament page
+      const tId = tournamentId.replace("tournament:", "");
+      redirectPath = `${frontendUrl}/tournament/${tId}?${params.toString()}`;
+    } else if (tournamentId) {
+      // Legacy support: treat state as tournament ID for backward compatibility
+      redirectPath = `${frontendUrl}/tournament/${tournamentId}/register?${params.toString()}`;
+    }
     
     res.redirect(redirectPath);
   } catch (error) {
