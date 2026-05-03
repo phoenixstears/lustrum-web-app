@@ -185,6 +185,19 @@ body {
   background: rgba(0, 166, 214, 0.25);
 }
 
+.bracket-button.disabled,
+.bracket-button[disabled] {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.55);
+  cursor: not-allowed;
+}
+
+.bracket-button.disabled:hover,
+.bracket-button[disabled]:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
 .error-container {
   text-align: center;
   padding: 60px 20px;

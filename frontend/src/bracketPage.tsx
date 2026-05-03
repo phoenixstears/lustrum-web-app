@@ -8,6 +8,8 @@ interface Tournament {
   gamename: string;
   starttime: string;
   brackettype: number;
+  challongeid: number;
+  bracketcreated: boolean;
 }
 
 interface Player {
@@ -188,6 +190,21 @@ export default function BracketPage() {
     });
     const data2 = await res2.json();
     data2 == data2;
+        const res3 = await fetch(`${API_URL}/tournaments/${bracketSelection.tournamentId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      gamename: tournament?.gamename,
+      starttime: tournament?.starttime,
+      brackettype: tournament?.brackettype,
+      challongeid: id,
+      bracketCreated: true
+    })
+  });
+    const data3 = await res3.json();
+    data3 == data3;
     window.open("https://challonge.com/" + bracketSelection.tournamentId.replaceAll("-","") , "_blank");
     }
     else {
@@ -227,10 +244,28 @@ export default function BracketPage() {
     });
     const data2 = await res2.json();
     data2 == data2;
+    const res3 = await fetch(`${API_URL}/tournaments/${bracketSelection.tournamentId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      gamename: tournament?.gamename,
+      starttime: tournament?.starttime,
+      brackettype: tournament?.brackettype,
+      challongeid: id,
+      bracketCreated: true
+    })
+  });
+    console.log("hello?");
+    const data3 = await res3.json();
+    console.log(data3);
     window.open("https://challonge.com/" + bracketSelection.tournamentId.replaceAll("-","") , "_blank");
     }
     console.log('Generate bracket clicked', bracketSelection, entrants);
     setGenerated(true);
+
+
   };
 
   if (loading) {

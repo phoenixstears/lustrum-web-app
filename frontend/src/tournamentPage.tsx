@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import './tournamentPage.css';
+
+const ADMIN_DISCORD_IDS = (import.meta.env.VITE_ADMIN_IDS || '')
+  .split(',')
+  .map((id: string) => id.trim())
+  .filter(Boolean);
 
 interface Tournament {
   tournamentid: string;
   gamename: string;
   starttime: string;
   brackettype: number;
+  challongeid: number;
+  bracketcreated: boolean
 }
 
 interface Player {
@@ -31,7 +38,11 @@ const API_URL = "http://localhost:5000/api";
 
 export default function TournamentPage(){
   const { id } = useParams<{ id: string }>();
-  
+  const [searchParams] = useSearchParams();
+  const currentUserDiscordId = searchParams.get('discordId') ?? '';
+  // Admin privilege check: compare current user discord ID to env var admin IDs
+  const isAdmin = currentUserDiscordId !== '' && ADMIN_DISCORD_IDS.includes(currentUserDiscordId);
+
   const [tournament, setTournament] = useState<Tournament | null>(null);
   const [players, setPlayers] = useState<GroupedPlayers>({ teams: {}, solo: [] });
   const [loading, setLoading] = useState(true);
@@ -123,6 +134,11 @@ export default function TournamentPage(){
     minute: '2-digit'
   });
 
+  const handleBracketClick = () => {
+    // Bracket link is intentionally blank here; replace the empty string with the real bracket URL
+    window.open("https://challonge.com/" + tournament.tournamentid.replaceAll("-",""), '_blank');
+  };
+
   return (
     <div className="tournament-page">
       <div className="tournament-header">
@@ -162,9 +178,19 @@ export default function TournamentPage(){
             <Link to={`/tournament/${tournament.tournamentid}/register`} className="register-button">
               Register for this Tournament
             </Link>
-            <Link to={`/tournament/${tournament.tournamentid}/bracket`} className="bracket-button">
-              Bracket Generator
-            </Link>
+            {isAdmin ? (
+              <Link to={`/tournament/${tournament.tournamentid}/bracket`} className="bracket-button">
+                Bracket Generator
+              </Link>
+            ) : tournament.bracketcreated ? (
+              <button type="button" className="bracket-button" onClick={handleBracketClick}>
+                Bracket
+              </button>
+            ) : (
+              <button type="button" className="bracket-button disabled" disabled>
+                Bracket
+              </button>
+            )}
           </div>
         </div>
 
