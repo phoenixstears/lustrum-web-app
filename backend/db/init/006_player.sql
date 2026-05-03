@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS players (
      discordName TEXT NOT NULL,
      inGameName TEXT NOT NULL,
      tournamentId TEXT NOT NULL,
-     teamId UUID REFERENCES teams(teamId) ON DELETE CASCADE,
+     teamId UUID NOT NULL REFERENCES teams(teamId) ON DELETE CASCADE,
      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
      UNIQUE(discordId, tournamentId)
 )
