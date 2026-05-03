@@ -15,7 +15,13 @@ import pool from "./db/index.js";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+const frontendUrl = process.env.FRONTEND_URL;
+
+app.use(
+  cors({
+    origin: frontendUrl || true,
+  })
+);
 app.use(express.json());
 app.use("/api/players", playerRouter);
 app.use("/api/tournaments", tournamentRouter);

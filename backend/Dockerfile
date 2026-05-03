@@ -3,11 +3,10 @@ FROM node:20
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install -g typescript
+RUN npm ci
 
 COPY . .
 
-# Build TypeScript
-RUN npx tsc
+RUN npm run build
 
-CMD ["node", "dist/index.js"]
+CMD ["npm", "run", "start"]

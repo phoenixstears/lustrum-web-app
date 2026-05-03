@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './bracketPage.css';
+import { API_BASE_URL } from './config.ts';
 
 
 interface Tournament {
@@ -40,8 +41,6 @@ const BRACKET_MODES: { id: BracketMode; label: string; description: string }[] =
   { id: 'groupSingle', label: 'Group + Single Elimination', description: 'Group stage then single elimination.' },
   { id: 'groupDouble', label: 'Group + Double Elimination', description: 'Group stage then double elimination.' }
 ];
-
-const API_URL = 'http://localhost:5000/api';
 
 interface EntrantDisplay {
   id: string;
@@ -91,8 +90,8 @@ export default function BracketPage() {
       setError(null);
 
       const [tournamentRes, playersRes] = await Promise.all([
-        fetch(`${API_URL}/tournaments/${id}`),
-        fetch(`${API_URL}/players/tournament/${id}/withteams`)
+        fetch(`${API_BASE_URL}/tournaments/${id}`),
+        fetch(`${API_BASE_URL}/players/tournament/${id}/withteams`)
       ]);
 
       if (!tournamentRes.ok) {
@@ -156,7 +155,7 @@ export default function BracketPage() {
   const handleGenerateBracket = async () => {
     const mode = bracketSelection.mode;
     if (mode == 'single' || mode == 'double'){
-    const res = await fetch(`${API_URL}/challonge/tournament`, {
+    const res = await fetch(`${API_BASE_URL}/challonge/tournament`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -181,7 +180,7 @@ export default function BracketPage() {
       },
       id: id
     });
-    const res2 = await fetch(`${API_URL}/challonge/players`, {
+    const res2 = await fetch(`${API_BASE_URL}/challonge/players`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -190,7 +189,7 @@ export default function BracketPage() {
     });
     const data2 = await res2.json();
     data2 == data2;
-        const res3 = await fetch(`${API_URL}/tournaments/${bracketSelection.tournamentId}`, {
+        const res3 = await fetch(`${API_BASE_URL}/tournaments/${bracketSelection.tournamentId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -208,7 +207,7 @@ export default function BracketPage() {
     window.open("https://challonge.com/" + bracketSelection.tournamentId.replaceAll("-","") , "_blank");
     }
     else {
-    const res = await fetch(`${API_URL}/challonge/tournament`, {
+    const res = await fetch(`${API_BASE_URL}/challonge/tournament`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -235,7 +234,7 @@ export default function BracketPage() {
       },
       id: id
     });
-    const res2 = await fetch(`${API_URL}/challonge/players`, {
+    const res2 = await fetch(`${API_BASE_URL}/challonge/players`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -244,7 +243,7 @@ export default function BracketPage() {
     });
     const data2 = await res2.json();
     data2 == data2;
-    const res3 = await fetch(`${API_URL}/tournaments/${bracketSelection.tournamentId}`, {
+    const res3 = await fetch(`${API_BASE_URL}/tournaments/${bracketSelection.tournamentId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"

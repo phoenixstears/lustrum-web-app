@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from './AuthContext.tsx';
+import { API_BASE_URL, BACKEND_ORIGIN } from './config.ts';
 import './registerPage.css';
 
 interface Tournament {
@@ -25,8 +26,6 @@ interface Team {
   teamname: string;
   membercount: number;
 }
-
-const API_URL = "http://localhost:5000/api";
 
 export default function RegisterPage(){
   const { id } = useParams<{ id: string }>();
@@ -68,7 +67,7 @@ export default function RegisterPage(){
     try {
       setLoading(true);
       setError(null);
-      const response = await fetch(`${API_URL}/tournaments/${id}`);
+      const response = await fetch(`${API_BASE_URL}/tournaments/${id}`);
       
       if (!response.ok) {
         throw new Error('Tournament not found');
@@ -86,7 +85,7 @@ export default function RegisterPage(){
 
   const fetchTeams = async () => {
     try {
-      const response = await fetch(`${API_URL}/teams?tournamentId=${id}`);
+      const response = await fetch(`${API_BASE_URL}/teams?tournamentId=${id}`);
       if (response.ok) {
         const teamsData = await response.json();
         setTeams(teamsData);
@@ -119,7 +118,7 @@ export default function RegisterPage(){
   const checkExistingSignup = async (discordId: string) => {
     try {
       const response = await fetch(
-        `${API_URL}/auth/check-signup/${discordId}/${id}`
+        `${API_BASE_URL}/auth/check-signup/${discordId}/${id}`
       );
       const data = await response.json();
       
@@ -132,8 +131,7 @@ export default function RegisterPage(){
   };
 
   const handleLoginWithDiscord = () => {
-    const backendUrl = "http://localhost:5000";
-    const redirectUrl = `${backendUrl}/api/auth/discord?state=${id}`;
+    const redirectUrl = `${BACKEND_ORIGIN}/api/auth/discord?state=${id}`;
     window.location.href = redirectUrl;
   };
 
@@ -161,7 +159,7 @@ export default function RegisterPage(){
 
     try {
       setIsSubmitting(true);
-      const response = await fetch(`${API_URL}/players`, {
+      const response = await fetch(`${API_BASE_URL}/players`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -202,7 +200,7 @@ export default function RegisterPage(){
 
     try {
       setIsSubmitting(true);
-      const response = await fetch(`${API_URL}/players`, {
+      const response = await fetch(`${API_BASE_URL}/players`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

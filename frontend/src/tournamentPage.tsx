@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from './AuthContext.tsx';
+import { API_BASE_URL, BACKEND_ORIGIN } from './config.ts';
 import './tournamentPage.css';
 
 const ADMIN_DISCORD_IDS = (import.meta.env.VITE_ADMIN_IDS || '')
@@ -36,8 +37,6 @@ interface GroupedPlayers {
   solo: Player[];
 }
 
-const API_URL = "http://localhost:5000/api";
-
 export default function TournamentPage(){
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
@@ -65,8 +64,8 @@ export default function TournamentPage(){
       setError(null);
       
       const [tournamentRes, playersRes] = await Promise.all([
-        fetch(`${API_URL}/tournaments/${id}`),
-        fetch(`${API_URL}/players/tournament/${id}/withteams`)
+        fetch(`${API_BASE_URL}/tournaments/${id}`),
+        fetch(`${API_BASE_URL}/players/tournament/${id}/withteams`)
       ]);
       
       if (!tournamentRes.ok) {
@@ -131,7 +130,7 @@ export default function TournamentPage(){
 
     try {
       const response = await fetch(
-        `${API_URL}/teams/${teamId}/join-code?playerId=${currentPlayer.playerid}`
+        `${API_BASE_URL}/teams/${teamId}/join-code?playerId=${currentPlayer.playerid}`
       );
       
       if (response.ok) {
@@ -156,7 +155,7 @@ export default function TournamentPage(){
     }
 
     try {
-      const response = await fetch(`${API_URL}/teams/${teamId}/leave`, {
+      const response = await fetch(`${API_BASE_URL}/teams/${teamId}/leave`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -190,9 +189,8 @@ export default function TournamentPage(){
   };
 
   const handleLoginWithDiscord = () => {
-    const backendUrl = "http://localhost:5000";
     const state = `tournament:${id}`;
-    const redirectUrl = `${backendUrl}/api/auth/discord?state=${encodeURIComponent(state)}`;
+    const redirectUrl = `${BACKEND_ORIGIN}/api/auth/discord?state=${encodeURIComponent(state)}`;
     window.location.href = redirectUrl;
   };
 

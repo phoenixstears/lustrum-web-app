@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { useAuth } from './AuthContext.tsx';
+import { API_BASE_URL, BACKEND_ORIGIN } from './config.ts';
 import './homePage.css';
 
 interface Tournament {
@@ -12,8 +13,6 @@ interface Tournament {
   challongedid: number;
   bracketCreated: boolean;
 }
-
-const API_URL = "http://localhost:5000/api";
 
 export default function HomePage(){
   const { discordUser, logout } = useAuth();
@@ -26,7 +25,7 @@ export default function HomePage(){
 
   const fetchTournaments = async () => {
     try {
-      const response = await fetch(`${API_URL}/tournaments`);
+      const response = await fetch(`${API_BASE_URL}/tournaments`);
       if (response.ok) {
         const data = await response.json();
         setTournaments(data);
@@ -39,9 +38,8 @@ export default function HomePage(){
   };
 
   const handleLoginWithDiscord = () => {
-    const backendUrl = "http://localhost:5000";
     const state = "home";
-    const redirectUrl = `${backendUrl}/api/auth/discord?state=${encodeURIComponent(state)}`;
+    const redirectUrl = `${BACKEND_ORIGIN}/api/auth/discord?state=${encodeURIComponent(state)}`;
     window.location.href = redirectUrl;
   };
 
