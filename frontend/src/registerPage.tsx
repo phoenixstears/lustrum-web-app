@@ -8,6 +8,8 @@ interface Tournament {
   gamename: string;
   starttime: string;
   brackettype: number;
+  challongeid: number;
+  bracketcreated: boolean;
   maxplayersperteam?: number;
 }
 

@@ -9,6 +9,8 @@ interface Tournament {
   gamename: string;
   starttime: string;
   brackettype: number;
+  challongedid: number;
+  bracketCreated: boolean;
 }
 
 const API_URL = "http://localhost:5000/api";

@@ -57,20 +57,21 @@ router.post('/', async (req: Request, res: Response) => {
 router.put('/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     const body = req.body ?? {};
-    const { gamename, starttime, brackettype } = body;
+    const { gamename, starttime, brackettype, challongeid, bracketCreated } = body;
     if (!gamename) {
         return res.status(400).json({ error: 'gamename is required' });
     }
     try {
         const result = await pool.query(
-                'UPDATE tournaments SET gamename = $1, starttime = $2, brackettype = $3 WHERE tournamentid = $4 RETURNING tournamentid, gamename, starttime, brackettype',
-                [gamename, starttime, brackettype, id]
+                'UPDATE tournaments SET gamename = $1, starttime = $2, brackettype = $3, challongeId = $4, bracketCreated = $5 WHERE tournamentid = $6 RETURNING tournamentid, gamename, starttime, brackettype',
+                [gamename, starttime, brackettype, challongeid, bracketCreated, id]
             );
         res.json(result.rows[0]);
     } catch (error) {
         console.error('Error updating tournament:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
+    return res;
 });
 
 router.delete('/:id', async (req: Request, res: Response) => {

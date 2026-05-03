@@ -5,5 +5,7 @@ CREATE TABLE IF NOT EXISTS tournaments (
      tournamentId UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
      gameName TEXT NOT NULL,
      startTime TIMESTAMP,
-     bracketType INT
+     bracketType INT,
+     challongeId INT,
+     bracketCreated BOOLEAN NOT NULL DEFAULT false
 )
