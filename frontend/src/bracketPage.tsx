@@ -187,8 +187,7 @@ export default function BracketPage() {
     },
     body: body2
     });
-    const data2 = await res2.json();
-    data2 == data2;
+    await res2.json();
         const res3 = await fetch(`${API_BASE_URL}/tournaments/${bracketSelection.tournamentId}`, {
     method: "PUT",
     headers: {
@@ -202,8 +201,7 @@ export default function BracketPage() {
       bracketCreated: true
     })
   });
-    const data3 = await res3.json();
-    data3 == data3;
+    await res3.json();
     window.open("https://challonge.com/" + bracketSelection.tournamentId.replaceAll("-","") , "_blank");
     }
     else {
@@ -241,8 +239,7 @@ export default function BracketPage() {
     },
     body: body2
     });
-    const data2 = await res2.json();
-    data2 == data2;
+    await res2.json();
     const res3 = await fetch(`${API_BASE_URL}/tournaments/${bracketSelection.tournamentId}`, {
     method: "PUT",
     headers: {
@@ -256,12 +253,9 @@ export default function BracketPage() {
       bracketCreated: true
     })
   });
-    console.log("hello?");
-    const data3 = await res3.json();
-    console.log(data3);
+    await res3.json();
     window.open("https://challonge.com/" + bracketSelection.tournamentId.replaceAll("-","") , "_blank");
     }
-    console.log('Generate bracket clicked', bracketSelection, entrants);
     setGenerated(true);
 
 
